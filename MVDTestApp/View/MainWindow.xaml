@@ -1,0 +1,87 @@
+﻿<Window x:Class="MVDTestApp.View.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:svg="clr-namespace:SharpVectors.Converters;assembly=SharpVectors.Converters.Wpf"
+        xmlns:view="clr-namespace:MVDTestApp.View"
+        xmlns:vm="clr-namespace:MVDTestApp.ViewModel" xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+        mc:Ignorable="d"
+        DataContext="{Binding MainWindowModel, Source={StaticResource Locator}}"
+        x:Name="FirstName"
+        Title="Менеджер задач" Height="450" Width="620" MinWidth="620">
+    <Window.Resources>
+    </Window.Resources>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" MinWidth="200" MaxWidth="300"/>
+            <ColumnDefinition Width="3" />
+            <ColumnDefinition Width="*" MinWidth="420"/>
+        </Grid.ColumnDefinitions>
+        <Grid Grid.Column="0" >
+            <TreeView ItemsSource="{Binding Tasks}" Name="TasksTreeView" Background="AliceBlue">
+                <TreeView.ItemTemplate>
+                    <HierarchicalDataTemplate ItemsSource="{Binding Path=SubTasks}">
+                        <Grid Margin="3" Background="Transparent" MinWidth="100" VerticalAlignment="Center">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="auto"/>
+                                <ColumnDefinition Width="auto"/>
+                            </Grid.ColumnDefinitions>
+                            <svg:SvgViewbox Grid.Column="0"
+                                SvgSource="{Binding Status, Converter={StaticResource WorkTaskStatusToSvg}}" Height="18" Width="18"/>
+                            <TextBlock Grid.Column="1" Text="{Binding Name}" 
+                                       Style="{StaticResource ItemMainText}"
+                                       TextDecorations="Underline"/>
+                            <Grid.ContextMenu>
+                                <ContextMenu>
+                                    <MenuItem Header="Обновить" 
+                                              Command="{Binding ReloadCommand}" 
+                                              CommandParameter="{Binding}"/>
+                                    <MenuItem Header="Добавить подзадачу"
+                                              Command="{Binding AddTaskCommand}"
+                                              CommandParameter="{Binding}"/>
+                                    <MenuItem Header="Редактировать"
+                                              Command="{Binding EditeTaskCommand}"
+                                              CommandParameter="{Binding}"/>
+                                    <MenuItem Header="Удалить"
+                                              Command="{Binding DeleteTaskCommand}"
+                                              CommandParameter="{Binding}"/>
+                                </ContextMenu>
+                            </Grid.ContextMenu> 
+                        </Grid>
+                    </HierarchicalDataTemplate>
+                </TreeView.ItemTemplate>
+                <TreeView.ContextMenu>
+                    <ContextMenu>
+                        <MenuItem Header="Добавить задачу"
+                                  Command="{Binding AddTaskCommand}"/>
+                        <MenuItem Header="Обновить"
+                                  Command="{Binding ReloadCommand}" />
+                    </ContextMenu>
+                </TreeView.ContextMenu>
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="SelectedItemChanged">
+                        <i:InvokeCommandAction 
+                         Command="{Binding SelectItemCommand}"
+                            CommandParameter="{Binding SelectedItem, ElementName=TasksTreeView}"/>
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </TreeView>
+        </Grid>
+        <GridSplitter Grid.Column="1" ShowsPreview="False" Width="3"
+        HorizontalAlignment="Center" VerticalAlignment="Stretch" />
+        <ScrollViewer Grid.Column="3">
+            <Frame Content="{Binding CurrentPage, Mode=TwoWay}" NavigationUIVisibility="Hidden"
+                   Opacity="{Binding FrameOpacity}"
+                   />
+        </ScrollViewer>
+        <Label Grid.Column="3"
+            Content="Добавте новую задачу" 
+                 HorizontalAlignment="Center" 
+                 VerticalAlignment="Center"
+                 FontSize="28"
+                 FontWeight="DemiBold"
+                 Foreground="#0067B8"
+               Visibility="{Binding NoAnyPageSetted, Converter={StaticResource BoolToVisibility}}"/>
+    </Grid>
+</Window>

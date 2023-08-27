@@ -1,0 +1,68 @@
+﻿<Page x:Class="MVDTestApp.View.WorkTaskCreateOrEdite"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      mc:Ignorable="d" 
+      DataContext="{Binding WorkTaskCreateOrEditeModel, Source={StaticResource Locator}}"
+      d:DesignHeight="450" d:DesignWidth="500"
+      Title="WorkTaskCreateOrEdite">
+
+    <Grid>
+        <StackPanel Orientation="Vertical" Margin="20">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <Label Style="{StaticResource Signature_Label}" Content="Название: "/>
+                <TextBox Grid.Column="1"
+                    Margin="10 0 0 0" Style="{StaticResource WorkTaskName_TextBox}"
+                         Text="{Binding Task.Name}"/>
+            </Grid>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <Label Style="{StaticResource Signature_Label}"
+                       Content="Плановая трудоёмкость: " Width="200"
+                       HorizontalContentAlignment="Right"/>
+                <TextBox Grid.Column="1"
+                    Style="{StaticResource Hourse_TextBox}"
+                         Text="{Binding Task.PlannedHours}"
+                         ToolTip="Задача"
+                         PreviewTextInput="DigitsOnlyFilter_PreviewTextInput">
+                </TextBox>
+            </Grid>
+
+            <Label Style="{StaticResource Signature_Label}"
+                       Content="Исполнители: "/>
+            <TextBox Text="{Binding Task.Executors}" 
+                       Style="{StaticResource WorkTaskExecutors_TextBox}"/>
+
+            <Label Style="{StaticResource Signature_Label}"
+                       Content="Описание: "/>
+            <TextBox Text="{Binding Task.Description}" 
+                       Style="{StaticResource WorkTaskDescription_TextBox}"/>
+
+            <Grid Margin="0 30 0 0">
+
+                <Button Style="{StaticResource Navigation_Button}"    
+                    Content="Отмена"
+                    Background="#DB0F10"
+                    HorizontalAlignment="Left"
+                        Command="{Binding CancelCommand}"
+                    />
+                
+                <Button Grid.Column="0"
+                    Style="{StaticResource Navigation_Button}"    
+                    Content="Принять"
+                    Background="#005CA5"
+                    HorizontalAlignment="Right"
+                        Command="{Binding AcceptCommand}"/>
+            </Grid>
+
+        </StackPanel>
+    </Grid>
+</Page>

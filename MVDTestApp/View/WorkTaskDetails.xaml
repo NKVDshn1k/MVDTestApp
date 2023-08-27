@@ -1,0 +1,106 @@
+﻿<Page x:Class="MVDTestApp.View.WorkTaskDetails"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:MVDTestApp.View" 
+      xmlns:svg="http://sharpvectors.codeplex.com/svgc/" 
+      xmlns:viewmodel="clr-namespace:MVDTestApp.ViewModel"
+      mc:Ignorable="d"
+      DataContext="{Binding WorkTaskDetailsModel, Source={StaticResource Locator}}"
+      d:DesignHeight="450" d:DesignWidth="500"
+      Title="WorkTaskDetails">
+    <Grid>
+        <StackPanel Orientation="Vertical" Margin="20">
+            <StackPanel Orientation="Horizontal">
+                <svg:SvgViewbox SvgSource="{Binding Task.Status, Converter={StaticResource WorkTaskStatusToSvg}}" 
+                                ToolTip="{Binding Task.Status, Converter={StaticResource WorkTaskStatusToText}}"
+                                Height="30" Width="30"/>
+                <TextBlock Margin="10 0 0 0" Style="{StaticResource WorkTaskName_TextBlock}" 
+                           Text="{Binding Task.Name}"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <Label Style="{StaticResource Signature_Label}"
+                       Content="Плановая трудоёмкость: " />
+                <TextBlock Style="{StaticResource Hourse_TextBlock}"
+                           Text="{Binding Task.PlannedHours}"
+                           ToolTip="Задача"/>
+                <TextBlock Style="{StaticResource Hourse_TextBlock}"
+                           Text="{Binding Task.SubPlannedHours, StringFormat=' +{0}'}"
+                           Foreground="#F35325"
+                           Visibility="{Binding Task.HasSubTasks, Converter={StaticResource BoolToVisibility}}"
+                           ToolTip="Подзадачи"/>
+                <TextBlock Style="{StaticResource Hourse_TextBlock}"
+                           Text="{Binding Task.FullPlannedHours, StringFormat=' ={0}'}"
+                           Foreground="#297912"
+                           Visibility="{Binding Task.HasSubTasks, Converter={StaticResource BoolToVisibility}}"
+                           ToolTip="Задачи и подзадач"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" 
+                        Visibility="{Binding Task.IsComplited, Converter={StaticResource BoolToVisibility}}">
+                <Label Style="{StaticResource Signature_Label}"
+                       Content="Фактическая трудоёмкость: " />
+                <TextBlock Style="{StaticResource Hourse_TextBlock}"
+                           Text="{Binding Task.FactualHours}"
+                           ToolTip="Задача"/>
+                <TextBlock Style="{StaticResource Hourse_TextBlock}"
+                           Text="{Binding Task.SubFactualHours, StringFormat=' +{0}'}"
+                           Foreground="#F35325"
+                           Visibility="{Binding Task.HasSubTasks, Converter={StaticResource BoolToVisibility}}"
+                           ToolTip="Подзадачи"/>
+                <TextBlock Style="{StaticResource Hourse_TextBlock}"
+                           Text="{Binding Task.FullFactualHours, StringFormat=' ={0}'}"
+                           Foreground="#297912"
+                           Visibility="{Binding Task.HasSubTasks, Converter={StaticResource BoolToVisibility}}"
+                           ToolTip="Задачи и подзадач"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <Label Style="{StaticResource Signature_Label}"
+                       Content="{Binding DateSign}"/>
+                <TextBlock Text="{Binding Task.Registration, StringFormat='{}{0:yy.MM.dd}'}"
+                           Style="{StaticResource WorkTaskDate_TextBlock}"
+                           ToolTip="Дата регистрации"/>
+                
+                <TextBlock Text="{Binding Task.Completion, StringFormat='{} - {0:yy.MM.dd}'}"
+                           Style="{StaticResource WorkTaskDate_TextBlock}"
+                           ToolTip="Дата выполнения" 
+                           Visibility="{Binding Task.IsComplited, Converter={StaticResource BoolToVisibility}}"
+                           />
+            </StackPanel>
+            <Label Style="{StaticResource Signature_Label}"
+                       Content="Исполнители:"/>
+            <TextBlock Text="{Binding Task.Executors}" 
+                       Style="{StaticResource WorkTaskExecutors_TextBlock}"/>
+            <Label Style="{StaticResource Signature_Label}"
+                       Content="Описание:"/>
+            <TextBlock Text="{Binding Task.Description}" 
+                       Style="{StaticResource WorkTaskDescription_TextBlock}"/>
+
+            <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Left" Margin="0 30 0 0">
+                    <Button Style="{StaticResource Navigation_Button}"    
+                        Content="Начать"
+                        Background="#F35325"
+                        Visibility="{Binding Task.IsStopedOrNotStarted, Converter={StaticResource BoolToVisibility}}"
+                            Command="{Binding StartCommand}"/>
+                    <Button Style="{StaticResource Navigation_Button}"    
+                        Content="Остановить"
+                        Background="#DB0F10"
+                        Visibility="{Binding Task.IsInProgress, Converter={StaticResource BoolToVisibility}}"
+                            Command="{Binding StopCommand}"/>
+                    <Button Style="{StaticResource Navigation_Button}"    
+                        Content="Завершить"
+                        Background="#297912"
+                        Visibility="{Binding Task.IsInProgress, Converter={StaticResource BoolToVisibility}}"
+                            Command="{Binding CompliteCommand}"/>
+            </StackPanel>
+            <Button 
+                    Style="{StaticResource Navigation_Button}"    
+                    Content="Редактировать"
+                    Background="#005CA5"
+                    Margin="0 10 0 0"
+                HorizontalAlignment="Left"
+                    Command="{Binding EditeCommand}"/>
+
+        </StackPanel>
+    </Grid>
+</Page>
