@@ -5,7 +5,6 @@ namespace MVDTestApp.Data.Base;
 public interface IRepository<T> where T : class, new()
 {
     IQueryable<T> Items { get; }
-    IQueryable<T> ItemsWithoutInclude { get; }
 
     T Get(int id);
     Task<T> GetAsync(int id, CancellationToken Cancel = default);
