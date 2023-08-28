@@ -92,21 +92,7 @@ public class WorkTaskCreateOrEditeViewModel : BaseViewModel
         {
             try
             {
-                var entityTask = await _repository.GetAsync(Task.Id);
-
-                if (Task.SubTasks == null || Task.SubTasks.Count == 0)
-                    entityTask = _mapper.Map(Task, entityTask);
-                else
-                {
-                    //При изменении задач с подзадачами EF бросает ошибку
-                    //Пока нет идей как это исправить, кроме вот таких костылей(
-                    entityTask.Name = Task.Name;
-                    entityTask.PlannedHours = Task.PlannedHours;
-                    entityTask.Description = Task.Description;
-                    entityTask.Executors = Task.Executors;  
-                }
-
-                await _repository.UpdateAsync(entityTask);
+                await DbDomainSharedQuery.EditeTask(Task);
             }
             catch (Exception ex)
             {
@@ -117,11 +103,7 @@ public class WorkTaskCreateOrEditeViewModel : BaseViewModel
         {
             try
             {
-                if (_parentTask != null)
-                    _parentTask.AddSubTask(Task);
-                var entityTask = _mapper.Map<WorkTask, EntityWorkTask>(Task);
-                await _repository.AddAsync(entityTask);
-                _mapper.Map(entityTask, Task);
+                await DbDomainSharedQuery.AddTask(Task, _parentTask);
             }
             catch (Exception ex)
             {

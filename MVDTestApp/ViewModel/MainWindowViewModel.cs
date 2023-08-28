@@ -104,15 +104,11 @@ public class MainWindowViewModel : BaseViewModel
         {
             if (task == null)
             {
-                var tasks = (await _repository.Items.ToArrayAsync()).Where(x => x.ParentWorkTaskId == null);
-                Tasks = new ObservableCollection<WorkTask>(_mapper.Map<WorkTask[]>(tasks));
+                Tasks = await DbDomainSharedQuery.LoadTasks();
             }
             else
             {
-                var reloadedTask = _mapper
-                    .Map<WorkTask>(await _repository.GetAsync(task.Id));
-                int taskIndex = Tasks.IndexOf(task);
-                Tasks[taskIndex] = reloadedTask;
+                await DbDomainSharedQuery.ReloadTask(task, Tasks);
             }
         }
         catch (Exception ex)
@@ -147,17 +143,8 @@ public class MainWindowViewModel : BaseViewModel
         try
         {
             WorkTask task = param as WorkTask;
-            if (task.HasSubTasks)
-            {
-                MessageBox.Show(Literals.CanNotDeliteNotTerminalTask);
-                return;
-            }
-            if (task.ParentTaskId == null)
-                Tasks.Remove(task);
-            else
-                task.ParentTask.SubTasks.Remove(task);
 
-            await _repository.RemoveAsync(task.Id);
+            await DbDomainSharedQuery.DeleteTask(task, Tasks);
 
             if (!AnyTasks)
                 ResetPage(null);
@@ -224,13 +211,18 @@ public class MainWindowViewModel : BaseViewModel
 
         if (task != null)
         {
-            if (task.ParentTaskId == null && !Tasks.Any(x => x.Id == task.Id))
+            bool hasParent = 
+                task.ParentTask != null;
+            if (!hasParent && !Tasks.Any(x => x.Id == task.Id))
             {
                 Tasks.Add(task);
             }
             else
             {
-                task.ParentTask.IsExpandedInTreeWiew = true;
+                if (hasParent)
+                {
+                    task.ParentTask.IsExpandedInTreeWiew = true;
+                }
                 task.IsSelectedInTreeWiew = true;
             }
 

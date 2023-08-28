@@ -78,12 +78,7 @@ public class WorkTaskDetailsViewModel : BaseViewModel
     {
         try
         {
-            var etityTask = await _repository.GetAsync(task.Id);
-            if (etityTask == null)
-                throw new Exception(Literals.TaskNotFound);
-            etityTask.Status = status;
-            await _repository.UpdateAsync(etityTask);
-            task.Status = status;
+            await DbDomainSharedQuery.ResetState(task, status);
         }
         catch (Exception ex)
         {
@@ -95,31 +90,7 @@ public class WorkTaskDetailsViewModel : BaseViewModel
     {
         try
         {
-            var etityTask = await _repository.Items.FirstAsync(x => x.Id == task.Id);
-            if (etityTask == null)
-                throw new Exception(Literals.TaskNotFound);
-
-            if (etityTask.Status != WorkTaskStatus.Completed)
-                if (!new FactualHourseSetter(etityTask).ShowDialog().Value)
-                    return false;
-
-            etityTask.Status = WorkTaskStatus.Completed;
-
-            etityTask.Completion =
-                DateTime.Now;
-
-            for(int i = 0; i < task.SubTasks.Count; i++)
-                if (!await CompliteHierarchically(task.SubTasks[i]))
-                    return false;
-
-            await _repository.UpdateAsync(etityTask);
-
-            if (task.SubTasks.Count != etityTask?.SubTasks?.Count)
-                _mapper.Map(task.SubTasks, etityTask.SubTasks);
-
-            _mapper.Map(etityTask, task);
-
-            return true;
+            return await DbDomainSharedQuery.CompliteHierarchically(task);
         }
         catch (Exception ex)
         {
