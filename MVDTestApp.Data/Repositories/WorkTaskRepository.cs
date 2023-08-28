@@ -14,35 +14,4 @@ public class WorkTaskRepository : DbRepository<WorkTask>
     public WorkTaskRepository(MVDTestContext db)
         : base(db) { }
 
-    public override void Update(WorkTask item)
-    {
-        try
-        {
-            _db.Update(item);
-            if (AutoSaveChanges)
-                _db.SaveChanges();
-        }
-        catch (Exception ex)
-        {
-            _db.Entry(item).State = EntityState.Detached;
-            throw ex;
-        }
-    }
-
-    public override async Task UpdateAsync(WorkTask item, CancellationToken Cancel = default)
-    {
-        try
-        {
-
-            _db.Update(item);
-            if (AutoSaveChanges)
-                await _db.SaveChangesAsync(Cancel);
-        }
-        catch (Exception ex)
-        {
-            _db.Entry(item).State = EntityState.Detached;
-            throw ex;
-        }
-    }
-
 }

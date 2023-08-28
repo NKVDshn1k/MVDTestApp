@@ -19,9 +19,6 @@ public abstract class DbRepository<T> : IRepository<T> where T : class, IEntity,
 
     public virtual IQueryable<T> Items => _set;
 
-    public virtual IQueryable<T> ItemsWithoutInclude => _set;
-
-
     public virtual T Add(T item)
     {
         try
@@ -97,7 +94,7 @@ public abstract class DbRepository<T> : IRepository<T> where T : class, IEntity,
     {
         try
         {
-            _db.Entry(item).State = EntityState.Modified;
+            _db.Update(item);
             if (AutoSaveChanges)
                 _db.SaveChanges();
         }
@@ -112,7 +109,7 @@ public abstract class DbRepository<T> : IRepository<T> where T : class, IEntity,
     {
         try
         {
-            _db.Entry(item).State = EntityState.Modified;
+            _db.Update(item);
             if (AutoSaveChanges)
                 await _db.SaveChangesAsync(Cancel);
         }
