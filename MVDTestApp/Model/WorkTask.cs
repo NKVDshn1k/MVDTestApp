@@ -12,6 +12,7 @@ namespace MVDTestApp.Model;
 
 public class WorkTask : ObservableObject
 {
+
     public int Id { get; set; }
 
     private string _name;
@@ -40,6 +41,21 @@ public class WorkTask : ObservableObject
     {
         get => _registration;
         set => SetProperty(ref _registration, value);
+    }
+
+
+    private bool _isSelectedInTreeWiew;
+    public bool IsSelectedInTreeWiew
+    {
+        get => _isSelectedInTreeWiew;
+        set => SetProperty(ref _isSelectedInTreeWiew, value);
+    }
+
+    private bool _isExpandedInTreeWiew;
+    public bool IsExpandedInTreeWiew
+    {
+        get => _isExpandedInTreeWiew;
+        set => SetProperty(ref _isExpandedInTreeWiew, value);
     }
 
     private WorkTaskStatus _status;

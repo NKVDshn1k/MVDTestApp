@@ -10,8 +10,6 @@
         DataContext="{Binding MainWindowModel, Source={StaticResource Locator}}"
         x:Name="FirstName"
         Title="Менеджер задач" Height="450" Width="620" MinWidth="620">
-    <Window.Resources>
-    </Window.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" MinWidth="200" MaxWidth="300"/>
@@ -20,6 +18,12 @@
         </Grid.ColumnDefinitions>
         <Grid Grid.Column="0" >
             <TreeView ItemsSource="{Binding Tasks}" Name="TasksTreeView" Background="AliceBlue">
+                <TreeView.ItemContainerStyle>
+                    <Style TargetType="{x:Type TreeViewItem}">
+                        <Setter Property="IsSelected" Value="{Binding IsSelectedInTreeWiew}" />
+                        <Setter Property="IsExpanded" Value="{Binding IsExpandedInTreeWiew}"/>
+                    </Style>
+                </TreeView.ItemContainerStyle>
                 <TreeView.ItemTemplate>
                     <HierarchicalDataTemplate ItemsSource="{Binding Path=SubTasks}">
                         <Grid Margin="3" Background="Transparent" MinWidth="100" VerticalAlignment="Center">

@@ -172,6 +172,9 @@ public class MainWindowViewModel : BaseViewModel
     {
         DataLocator.Data = param;
         ResetPage(new WorkTaskDetails());
+
+        if (param != null && param is WorkTask)
+            (param as WorkTask).IsSelectedInTreeWiew = true;
     }
 
     private void SelectItem(object param) =>
@@ -221,14 +224,25 @@ public class MainWindowViewModel : BaseViewModel
 
         if (task != null)
         {
-            if (task.ParentTaskId == null && !Tasks.Any(x=>x.Id == task.Id))
+            if (task.ParentTaskId == null && !Tasks.Any(x => x.Id == task.Id))
+            {
                 Tasks.Add(task);
+            }
+            else
+            {
+                task.ParentTask.IsExpandedInTreeWiew = true;
+                task.IsSelectedInTreeWiew = true;
+            }
 
             ShowDetails(task);
         }
         else if (AnyTasks)
+        {
             ShowDetails(Tasks[0]);
+        }
         else
+        {
             ShowDetails(null);
+        }
     }
 }
