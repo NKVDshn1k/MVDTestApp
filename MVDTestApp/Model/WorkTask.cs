@@ -43,7 +43,7 @@ public class WorkTask : ObservableObject
         set => SetProperty(ref _registration, value);
     }
 
-
+    #region TreeView
     private bool _isSelectedInTreeWiew;
     public bool IsSelectedInTreeWiew
     {
@@ -57,6 +57,7 @@ public class WorkTask : ObservableObject
         get => _isExpandedInTreeWiew;
         set => SetProperty(ref _isExpandedInTreeWiew, value);
     }
+    #endregion
 
     private WorkTaskStatus _status;
     public WorkTaskStatus Status
@@ -83,7 +84,18 @@ public class WorkTask : ObservableObject
     public int FactualHours
     {
         get => _factualHours;
-        set => SetProperty(ref _factualHours, value);
+        set
+        {
+            SetProperty(ref _factualHours, value);
+
+            //Проход по всем батям элемента
+            for (WorkTask currTask = ParentTask; currTask != null; 
+                currTask = currTask.ParentTask)
+            {
+                ParentTask.OnPropertyChanged("SubFactualHours");
+                ParentTask.OnPropertyChanged("FullFactualHours");
+            }
+        }
     }
 
     #region Countable
@@ -98,7 +110,7 @@ public class WorkTask : ObservableObject
         PlannedHours + SubPlannedHours;
 
     public int SubFactualHours =>
-    SubTasks?.Sum(x => x.FullFactualHours) ?? 0;
+        SubTasks?.Sum(x => x.FullFactualHours) ?? 0;
 
     public int FullFactualHours =>
         FactualHours + SubFactualHours;
