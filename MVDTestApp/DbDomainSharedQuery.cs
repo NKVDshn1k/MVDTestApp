@@ -103,30 +103,30 @@ public static class DbDomainSharedQuery
 
     public static async Task<bool> CompliteHierarchically(WorkTask task)
     {
-            var etityTask = await _repository.Items.FirstAsync(x => x.Id == task.Id);
-            if (etityTask == null)
-                throw new Exception(Literals.TaskNotFound);
+        var etityTask = await _repository.Items.FirstAsync(x => x.Id == task.Id);
+        if (etityTask == null)
+            throw new Exception(Literals.TaskNotFound);
 
-            if (etityTask.Status != WorkTaskStatus.Completed)
-                if (!new FactualHourseSetter(etityTask).ShowDialog().Value)
-                    return false;
+        if (etityTask.Status != WorkTaskStatus.Completed)
+            if (!new FactualHourseSetter(etityTask).ShowDialog().Value)
+                return false;
 
-            etityTask.Status = WorkTaskStatus.Completed;
+        etityTask.Status = WorkTaskStatus.Completed;
 
-            etityTask.Completion =
-                DateTime.Now;
+        etityTask.Completion =
+            DateTime.Now;
 
-            for (int i = 0; i < task.SubTasks.Count; i++)
-                if (!await CompliteHierarchically(task.SubTasks[i]))
-                    return false;
+        for (int i = 0; i < task.SubTasks.Count; i++)
+            if (!await CompliteHierarchically(task.SubTasks[i]))
+                return false;
 
-            await _repository.UpdateAsync(etityTask);
+        await _repository.UpdateAsync(etityTask);
 
-            if (task.SubTasks.Count != etityTask?.SubTasks?.Count)
-                _mapper.Map(task.SubTasks, etityTask.SubTasks);
+        if (task.SubTasks.Count != etityTask?.SubTasks?.Count)
+            _mapper.Map(task.SubTasks, etityTask.SubTasks);
 
-            _mapper.Map(etityTask, task);
+        _mapper.Map(etityTask, task);
 
-            return true;
+        return true;
     }
 }

@@ -5,11 +5,13 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:MVDTestApp.View" 
       xmlns:svg="http://sharpvectors.codeplex.com/svgc/" 
-      xmlns:viewmodel="clr-namespace:MVDTestApp.ViewModel"
+      xmlns:vm="clr-namespace:MVDTestApp.ViewModel"
       mc:Ignorable="d"
-      DataContext="{Binding WorkTaskDetailsModel, Source={StaticResource Locator}}"
       d:DesignHeight="450" d:DesignWidth="500"
       Title="WorkTaskDetails">
+    <Page.DataContext>
+        <vm:WorkTaskDetailsViewModel/>
+    </Page.DataContext>
     <Grid>
         <StackPanel Orientation="Vertical" Margin="20">
             <StackPanel Orientation="Horizontal">

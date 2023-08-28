@@ -13,8 +13,6 @@
             <convert:WorkTaskStatusToSvgConverter x:Key="WorkTaskStatusToSvg"/>
             <convert:WorkTaskStatusToTextConverter x:Key="WorkTaskStatusToText"/>
 
-            <locator:ViewModelLocator x:Key="Locator"/>
-
             <Style TargetType="Button" x:Key="Navigation_Button">
                 <Setter Property="Foreground" Value="White"/>
                 <Setter Property="FontWeight" Value="DemiBold"/>

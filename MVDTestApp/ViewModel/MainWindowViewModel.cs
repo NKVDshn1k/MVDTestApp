@@ -22,14 +22,8 @@ public class MainWindowViewModel : BaseViewModel
 {
     private const int _pageResetTime = 30;
 
-    private IRepository<EntityWorkTask> _repository;
-    private IMapper _mapper;
-
-    public MainWindowViewModel(IRepository<EntityWorkTask> repository, IMapper mapper)
+    public MainWindowViewModel()
     {
-        _repository = repository;
-        _mapper = mapper;
-
         ReloadCommand = new Command(async (x) => await Reload(x));
         AddTaskCommand = new Command(AddTask);
         EditeTaskCommand = new Command(EditeTask);

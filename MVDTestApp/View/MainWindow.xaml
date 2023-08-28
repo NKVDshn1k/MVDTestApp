@@ -5,11 +5,14 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:svg="clr-namespace:SharpVectors.Converters;assembly=SharpVectors.Converters.Wpf"
         xmlns:view="clr-namespace:MVDTestApp.View"
-        xmlns:vm="clr-namespace:MVDTestApp.ViewModel" xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+        xmlns:vm="clr-namespace:MVDTestApp.ViewModel" 
+        xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
         mc:Ignorable="d"
-        DataContext="{Binding MainWindowModel, Source={StaticResource Locator}}"
         x:Name="FirstName"
         Title="Менеджер задач" Height="450" Width="620" MinWidth="620">
+    <Window.DataContext>
+        <vm:MainWindowViewModel/>
+    </Window.DataContext>
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" MinWidth="200" MaxWidth="300"/>

@@ -17,13 +17,8 @@ public class WorkTaskCreateOrEditeViewModel : BaseViewModel
 {
     public static event Action<WorkTask> EditingOrAddingIsDone;
 
-    private IRepository<EntityWorkTask> _repository;
-    private IMapper _mapper;
-    public WorkTaskCreateOrEditeViewModel(IRepository<EntityWorkTask> repository, IMapper mapper)
+    public WorkTaskCreateOrEditeViewModel()
     {
-        _repository = repository;
-        _mapper = mapper;
-
         TaskDataPackage pack = DataLocator.Data as TaskDataPackage;
 
         if (pack == null)

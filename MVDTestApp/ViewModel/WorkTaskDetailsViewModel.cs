@@ -1,15 +1,10 @@
-﻿using AutoMapper;
-using Microsoft.EntityFrameworkCore;
-using MVDTestApp.Data.Base;
-using MVDTestApp.Locator;
+﻿using MVDTestApp.Locator;
 using MVDTestApp.Model;
-using MVDTestApp.View;
 using MvvmHelpers;
 using MvvmHelpers.Commands;
 using System;
 using System.Threading.Tasks;
 using System.Windows;
-using EntityWorkTask = MVDTestApp.Data.Entityes.WorkTask;
 using WorkTaskStatus = MVDTestApp.Data.Entityes.WorkTaskStatus;
 
 namespace MVDTestApp.ViewModel;
@@ -21,12 +16,8 @@ public class WorkTaskDetailsViewModel : BaseViewModel
     public WorkTask Task { get; }
 
 
-    private IRepository<EntityWorkTask> _repository;
-    private IMapper _mapper;
-    public WorkTaskDetailsViewModel(IRepository<EntityWorkTask> repository, IMapper mapper)
+    public WorkTaskDetailsViewModel()
     {
-        _repository = repository;
-        _mapper = mapper;
 
         Task = DataLocator.Data as WorkTask;
 
